@@ -23,3 +23,8 @@ func (c *Client) GetRepoBranch(user, repo, branch string) (*Branch, error) {
 	b := new(Branch)
 	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branches/%s", user, repo, branch), nil, nil, &b)
 }
+
+type CreateBranchOption struct {
+	BranchName string `json:"branchname" binding:"Required"`
+	Base       string `json:"base" binding:"Required"`
+}
