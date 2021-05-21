@@ -1,3 +1,3 @@
-module github.com/Cowelltech/go-gogs-client
+module github.com/CowellTech/go-gogs-client
 
 go 1.16
