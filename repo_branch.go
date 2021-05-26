@@ -97,3 +97,18 @@ func (c *Client) GetBranchsDiffFile(fileList []DiffFileList) (*[]ReturnDiffFile,
 	b := new([]ReturnDiffFile)
 	return b, c.getParsedResponse("POST", "/repos/raw", nil, bytes.NewReader(body), &b)
 }
+
+func (c *Client) CreateBranch(user, repo string, opt CreateBranchOption) (*Branch, error) {
+	body, err := json.Marshal(&opt)
+	if err != nil {
+		return nil, err
+	}
+
+	b := new(Branch)
+	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branch", user, repo), nil, bytes.NewReader(body), &b)
+}
+
+func (c *Client) DeleteBranch(user, repo, branch string) error {
+	_, err := c.getResponse("DELETE", fmt.Sprintf("/repos/%s/%s/branch/%s", user, repo, branch), nil, nil)
+	return err
+}
