@@ -36,6 +36,12 @@ func (c *Client) AdminAddTeamMembership(teamID int64, user string) error {
 	return err
 }
 
+func (c *Client) AdminRemoveTeamMembership(teamID int64, user string) error {
+	_, err := c.getResponse("DELETE", fmt.Sprintf("/admin/teams/%d/members/%s", teamID, user),
+		jsonHeader, nil)
+	return err
+}
+
 func (c *Client) AdminAddTeamRepository(teamID int64, repo string) error {
 	_, err := c.getResponse("PUT", fmt.Sprintf("/admin/teams/%d/repos/%s", teamID, repo),
 		jsonHeader, nil)
