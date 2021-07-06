@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"time"
 )
 
 // Branch represents a repository branch.
@@ -111,4 +112,21 @@ func (c *Client) CreateBranch(user, repo string, opt CreateBranchOption) (*Branc
 func (c *Client) DeleteBranch(user, repo, branch string) error {
 	_, err := c.getResponse("DELETE", fmt.Sprintf("/repos/%s/%s/branch/%s", user, repo, branch), nil, nil)
 	return err
+}
+
+type CommitUserResponse struct {
+	Name  string    `json:"Name"`
+	Email string    `json:"Email"`
+	When  time.Time `json:"When"`
+}
+type CommitResponse struct {
+	ID        string             `json:"id"`
+	Author    CommitUserResponse `json:"author"`
+	Committer CommitUserResponse `json:"committer"`
+	Message   string             `json:"message"`
+}
+
+func (c *Client) GetCommitsOfBranch(user, repo, branch, pagesize string) (*[]CommitResponse, error) {
+	b := new([]CommitResponse)
+	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branch/commits/%s/%s", user, repo, pagesize, branch), nil, nil, &b)
 }
