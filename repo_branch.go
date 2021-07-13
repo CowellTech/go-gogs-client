@@ -8,6 +8,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -87,7 +88,10 @@ func (c *Client) GetBranchsDiff(projectList []ProjectBranch) (*[]DiffBranchInfo,
 		return nil, err
 	}
 	b := new([]DiffBranchInfo)
-	return b, c.getParsedResponse("POST", "/repos/branchs/diff", nil, bytes.NewReader(body), &b)
+	header := http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+	return b, c.getParsedResponse("POST", "/repos/branchs/diff", header, bytes.NewReader(body), &b)
 }
 
 func (c *Client) GetBranchsDiffFile(fileList []DiffFileList) (*[]ReturnDiffFile, error) {
@@ -96,7 +100,10 @@ func (c *Client) GetBranchsDiffFile(fileList []DiffFileList) (*[]ReturnDiffFile,
 		return nil, err
 	}
 	b := new([]ReturnDiffFile)
-	return b, c.getParsedResponse("POST", "/repos/raw", nil, bytes.NewReader(body), &b)
+	header := http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+	return b, c.getParsedResponse("POST", "/repos/raw", header, bytes.NewReader(body), &b)
 }
 
 func (c *Client) CreateBranch(user, repo string, opt CreateBranchOption) (*Branch, error) {
@@ -106,7 +113,10 @@ func (c *Client) CreateBranch(user, repo string, opt CreateBranchOption) (*Branc
 	}
 
 	b := new(Branch)
-	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branch", user, repo), nil, bytes.NewReader(body), &b)
+	header := http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branch", user, repo), header, bytes.NewReader(body), &b)
 }
 
 func (c *Client) DeleteBranch(user, repo, branch string) error {
