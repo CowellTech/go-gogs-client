@@ -152,3 +152,15 @@ type TestPatchResponse struct {
 	HeadCommit  string `json:"headCommit"`
 	HasConflict bool   `json:"hasConflict"`
 }
+
+type AutoMergeRequest struct {
+	BaseBranch        string `json:"baseBranch"`
+	HeadBranch        string `json:"headBranch"`
+	MergeStyle        string `json:"mergeStyle"`
+	CommitDescription string `json:"commitDescription"`
+}
+
+type AutoMergeResponse struct {
+	Result string `json:"result"` // MergeSuccess|MergeFailed|PushSuccess|PushFailed
+	Msg    string `json:"msg"`
+}
