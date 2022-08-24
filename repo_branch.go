@@ -140,3 +140,15 @@ func (c *Client) GetCommitsOfBranch(user, repo, branch, pagesize string) (*[]Com
 	b := new([]CommitResponse)
 	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branch/commits/%s/%s", user, repo, pagesize, branch), nil, nil, &b)
 }
+
+type TestPatchRequest struct {
+	BaseBranch   string `json:"baseBranch"`
+	HeadBranch   string `json:"headBranch"`
+	PatchContent string `json:"patchContent"`
+}
+
+type TestPatchResponse struct {
+	BaseCommit  string `json:"baseCommit"`
+	HeadCommit  string `json:"headCommit"`
+	HasConflict bool   `json:"hasConflict"`
+}
