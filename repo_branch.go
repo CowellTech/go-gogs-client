@@ -164,3 +164,41 @@ type AutoMergeResponse struct {
 	Result string `json:"result"` // MergeSuccess|MergeFailed|PushSuccess|PushFailed
 	Msg    string `json:"msg"`
 }
+
+type DiffBinaryInfo struct {
+	Head         string `json:"head"`
+	BaseCommit   string `json:"baseCommit"`
+	HeadCommit   string `json:"headCommit"`
+	PatchContent []byte `json:"patchContent"`
+}
+
+func (c *Client) UpdatePatch(user, repo, base, head string) (*DiffBinaryInfo, error) {
+	b := new(DiffBinaryInfo)
+	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branch/patch/%s/%s", user, repo, base, head), nil, nil, &b)
+}
+
+func (c *Client) TestPatch(user, repo string, opt TestPatchRequest) (*TestPatchResponse, error) {
+	body, err := json.Marshal(&opt)
+	if err != nil {
+		return nil, err
+	}
+
+	b := new(TestPatchResponse)
+	header := http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branches/patch/test", user, repo), header, bytes.NewReader(body), &b)
+}
+
+func (c *Client) AutoMerge(user, repo string, opt AutoMergeRequest) (*AutoMergeResponse, error) {
+	body, err := json.Marshal(&opt)
+	if err != nil {
+		return nil, err
+	}
+
+	b := new(AutoMergeResponse)
+	header := http.Header{
+		"Content-Type": []string{"application/json"},
+	}
+	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branches/automerge", user, repo), header, bytes.NewReader(body), &b)
+}
