@@ -161,8 +161,9 @@ type AutoMergeRequest struct {
 }
 
 type AutoMergeResponse struct {
-	Result string `json:"result"` // MergeSuccess|MergeFailed|PushSuccess|PushFailed
-	Msg    string `json:"msg"`
+	MergedCommit string `json:"mergedCommit"`
+	Result       string `json:"result"` // MergeSuccess|MergeFailed|PushSuccess|PushFailed
+	Msg          string `json:"msg"`
 }
 
 type DiffBinaryInfo struct {
