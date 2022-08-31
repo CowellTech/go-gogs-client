@@ -119,8 +119,14 @@ func (c *Client) CreateBranch(user, repo string, opt CreateBranchOption) (*Branc
 	return b, c.getParsedResponse("POST", fmt.Sprintf("/repos/%s/%s/branch", user, repo), header, bytes.NewReader(body), &b)
 }
 
-func (c *Client) DeleteBranch(user, repo, branch string) error {
-	_, err := c.getResponse("DELETE", fmt.Sprintf("/repos/%s/%s/branch/%s", user, repo, branch), nil, nil)
+func (c *Client) DeleteBranch(user, repo, branch string, force bool) error {
+	var urlFormat string
+	urlFormat = "/repos/%s/%s/branch/%s"
+	if force {
+		urlFormat = "/repos/%s/%s/branch/%s?force=true"
+	}
+
+	_, err := c.getResponse("DELETE", fmt.Sprintf(urlFormat, user, repo, branch), nil, nil)
 	return err
 }
 
