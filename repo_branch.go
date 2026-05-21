@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -182,6 +183,14 @@ type DiffBinaryInfo struct {
 func (c *Client) UpdatePatch(user, repo, base, head string) (*DiffBinaryInfo, error) {
 	b := new(DiffBinaryInfo)
 	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branch/patch/%s/%s", user, repo, base, head), nil, nil, &b)
+}
+
+func (c *Client) UpdatePatchByQuery(user, repo, base, head string) (*DiffBinaryInfo, error) {
+	b := new(DiffBinaryInfo)
+	v := url.Values{}
+	v.Set("base", base)
+	v.Set("head", head)
+	return b, c.getParsedResponse("GET", fmt.Sprintf("/repos/%s/%s/branch/patch?%s", user, repo, v.Encode()), nil, nil, &b)
 }
 
 func (c *Client) TestPatch(user, repo string, opt TestPatchRequest) (*TestPatchResponse, error) {
